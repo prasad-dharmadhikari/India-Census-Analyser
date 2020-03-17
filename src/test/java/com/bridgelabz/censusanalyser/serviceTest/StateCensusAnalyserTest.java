@@ -14,6 +14,7 @@ public class StateCensusAnalyserTest
     private static final String PATH_OF_CSV_FILE = "./src/test/resources/StateCensusData.csv";
     private static final String PATH_OF_CSV_FILE_FOR_FILE_NOT_FOUND_EXCEPTION = "./src/test/resources/StateCensu.csv";
     private static final String PATH_OF_CSV_FILE_FOR_INCORRECT_TYPE_EXCEPTION = "/home/bridgelabz/Desktop/IndiaCensusAnalyser/src/test/resources/StateCensusData.docx";
+    private static final String PATH_OF_CSV_FILE_FOR_INCORRECT_DELIMITER = "./src/test/resources/StateCensusDataCopy.csv";
 
     @Test
     public void givenTheStateCensusCSVFile_WhenProper_CheckIfNoOfRecordsMatches() throws IOException, CsvException, IOException, CensusAnalyserException
@@ -43,6 +44,18 @@ public class StateCensusAnalyserTest
         catch (CensusAnalyserException e)
         {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.ENTERED_WRONG_FILE_TYPE,e.type);
+        }
+    }
+    @Test
+    public void givenTheStateCensusCSVFile_IfDelimiterIsIncorrect_ShouldThrowCustomException() throws IOException
+    {
+        try
+        {
+            int noOfRecords = StateCensusAnalyser.loadCSVFileData(PATH_OF_CSV_FILE_FOR_INCORRECT_DELIMITER);
+        }
+        catch (CensusAnalyserException e)
+        {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.INCORRECT_DELIMITER,e.type);
         }
     }
 }
