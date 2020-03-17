@@ -30,6 +30,7 @@ public class StateCensusAnalyser
                 noOfRecords++;
                 csvRecords.next();
             }
+            return noOfRecords;
         }
         catch (NoSuchFileException e)
         {
@@ -39,7 +40,6 @@ public class StateCensusAnalyser
         {
             throw new CensusAnalyserException(CensusAnalyserException.ExceptionType.INCORRECT_DELIMITER,"FILE DELIMITER IS INCORRECT");
         }
-        return noOfRecords;
     }
     public static void getFileExtension(File filePath) throws CensusAnalyserException
     {
@@ -53,6 +53,5 @@ public class StateCensusAnalyser
         {
             throw new CensusAnalyserException(CensusAnalyserException.ExceptionType.ENTERED_WRONG_FILE_TYPE,"FILE TYPE IS INCORRECT");
         }
-
     }
 }
