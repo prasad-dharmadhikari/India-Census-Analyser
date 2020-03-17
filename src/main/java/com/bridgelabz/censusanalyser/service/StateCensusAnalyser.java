@@ -1,4 +1,5 @@
 package com.bridgelabz.censusanalyser.service;
+import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
 import com.bridgelabz.censusanalyser.model.CSVStateCensus;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
@@ -12,7 +13,7 @@ import java.util.Iterator;
 
 public class StateCensusAnalyser
 {
-    public static int loadCSVFileData(String filePath) throws IOException
+    public static int loadCSVFileData(String filePath) throws CensusAnalyserException
     {
         int noOfRecords = 0;
         try(Reader reader = Files.newBufferedReader(Paths.get(filePath)))
@@ -26,6 +27,10 @@ public class StateCensusAnalyser
                 noOfRecords++;
                 csvRecords.next();
             }
+        }
+        catch (IOException e)
+        {
+            throw new CensusAnalyserException(CensusAnalyserException.ExceptionType.ENTERED_WRONG_FILE_NAME,"FILE NOT FOUND");
         }
         return noOfRecords;
     }
