@@ -47,11 +47,11 @@ public class StateCensusAnalyserTest
         }
     }
     @Test
-    public void givenTheStateCensusCSVFile_IfDelimiterIsIncorrect_ShouldThrowCustomException() throws IOException
-    {
+    public void givenTheStateCensusCSVFile_IfDelimiterIsIncorrect_ShouldThrowCustomException() throws IOException, CensusAnalyserException {
         try
         {
             int noOfRecords = StateCensusAnalyser.loadCSVFileData(PATH_OF_CSV_FILE_FOR_INCORRECT_DELIMITER);
+            Assert.assertEquals(28,noOfRecords);
         }
         catch (CensusAnalyserException e)
         {
