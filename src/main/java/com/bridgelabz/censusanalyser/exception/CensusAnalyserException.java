@@ -4,7 +4,7 @@ public class CensusAnalyserException extends Exception
 {
     public enum ExceptionType
     {
-        ENTERED_WRONG_FILE_NAME;
+        ENTERED_WRONG_FILE_NAME,ENTERED_WRONG_FILE_TYPE;
     }
     public ExceptionType type;
     // Constructor
