@@ -2,10 +2,10 @@ package com.bridgelabz.censusanalyser.serviceTest;
 
 import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
 import com.bridgelabz.censusanalyser.service.StateCensusAnalyser;
+import com.bridgelabz.censusanalyser.service.StateCodeAnalyser;
 import com.opencsv.exceptions.CsvException;
 import org.junit.Assert;
 import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -16,6 +16,7 @@ public class StateCensusAnalyserTest
     private static final String PATH_OF_CSV_FILE_FOR_INCORRECT_TYPE_EXCEPTION = "/home/bridgelabz/Desktop/IndiaCensusAnalyser/src/test/resources/StateCensusData.docx";
     private static final String PATH_OF_CSV_FILE_FOR_INCORRECT_DELIMITER = "./src/test/resources/StateCensusDataCopy.csv";
     private static final String PATH_OF_CSV_FILE_FOR_INCORRECT_HEADER = "./src/test/resources/StateCensusDataCopy2.csv";
+    private static final String PATH_OF_STATE_CODE_CSV_FILE = "./src/test/resources/StateCode.csv";
     @Test
     public void givenTheStateCensusCSVFile_WhenProper_CheckIfNoOfRecordsMatches() throws IOException, CsvException, IOException, CensusAnalyserException
     {
@@ -71,5 +72,11 @@ public class StateCensusAnalyserTest
         {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER,e.type);
         }
+    }
+    @Test
+    public void givenTheStateCodeCSVFile_WhenProper_CheckIfNoOfRecordsMatches() throws IOException
+    {
+        int noOfRecords = StateCodeAnalyser.loadCSVFileData(PATH_OF_STATE_CODE_CSV_FILE);
+        Assert.assertEquals(37,noOfRecords);
     }
 }
