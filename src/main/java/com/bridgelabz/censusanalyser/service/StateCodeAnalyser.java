@@ -6,7 +6,6 @@ import com.bridgelabz.censusanalyser.model.StateCode;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -37,8 +36,11 @@ public class StateCodeAnalyser
         {
             throw new CensusAnalyserException(CensusAnalyserException.ExceptionType.ENTERED_WRONG_FILE_NAME,"FILE NAME IS INCORRECT");
         }
+        catch (RuntimeException e)
+        {
+            throw new CensusAnalyserException(CensusAnalyserException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER,"FILE DELIMITER OR HEADER IS INCORRECT");
+        }
     }
-
     public static void getFileExtension(File filePath) throws CensusAnalyserException
     {
         String fileName = filePath.getName();
