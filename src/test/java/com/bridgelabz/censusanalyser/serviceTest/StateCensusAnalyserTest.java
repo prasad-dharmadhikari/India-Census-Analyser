@@ -1,30 +1,30 @@
 package com.bridgelabz.censusanalyser.serviceTest;
 
 import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
-import com.bridgelabz.censusanalyser.service.StateCensusAnalyser;
-import com.bridgelabz.censusanalyser.service.StateCodeAnalyser;
+import com.bridgelabz.censusanalyser.service.CensusAnalyser;
 import com.opencsv.exceptions.CsvException;
 import org.junit.Assert;
 import org.junit.Test;
+
 import java.io.File;
 import java.io.IOException;
 
 public class StateCensusAnalyserTest
 {
-    private static final String PATH_OF_CSV_FILE = "./src/test/resources/StateCensusData.csv";
-    private static final String PATH_OF_CSV_FILE_FOR_FILE_NOT_FOUND_EXCEPTION = "./src/test/resources/StateCensu.csv";
-    private static final String PATH_OF_CSV_FILE_FOR_INCORRECT_TYPE_EXCEPTION = "/home/bridgelabz/Desktop/IndiaCensusAnalyser/src/test/resources/StateCensusData.docx";
-    private static final String PATH_OF_CSV_FILE_FOR_INCORRECT_DELIMITER = "./src/test/resources/StateCensusDataCopy.csv";
-    private static final String PATH_OF_CSV_FILE_FOR_INCORRECT_HEADER = "./src/test/resources/StateCensusDataCopy2.csv";
-    private static final String PATH_OF_STATE_CODE_CSV_FILE = "./src/test/resources/StateCode.csv";
-    private static final String PATH_OF_STATE_CODE_CSV_FILE_FOR_FILE_NOT_FOUND = "./src/test/resources/Sta.csv";
-    private static final String PATH_OF_STATE_CODE_CSV_FILE_FOR_INCORRECT_TYPE = "/home/bridgelabz/Desktop/IndiaCensusAnalyser/src/test/resources/StateCode.docx";
-    private static final String PATH_OF_STATE_CODE_CSV_FILE_INCORRECT_DELIMITER = "./src/test/resources/StateCodeCopy.csv";
-    private static final String PATH_OF_STATE_CODE_CSV_FILE_INCORRECT_HEADER = "./src/test/resources/StateCodeCopy2.csv";
+    String PATH_OF_CSV_FILE = "./src/test/resources/StateCensusData.csv";
+    String PATH_OF_CSV_FILE_FOR_FILE_NOT_FOUND_EXCEPTION = "./src/test/resources/StateCensu.csv";
+    String PATH_OF_CSV_FILE_FOR_INCORRECT_TYPE_EXCEPTION = "/home/bridgelabz/Desktop/IndiaCensusAnalyser/src/test/resources/StateCensusData.docx";
+    String PATH_OF_CSV_FILE_FOR_INCORRECT_DELIMITER = "./src/test/resources/StateCensusDataCopy.csv";
+    String PATH_OF_CSV_FILE_FOR_INCORRECT_HEADER = "./src/test/resources/StateCensusDataCopy2.csv";
+    String PATH_OF_STATE_CODE_CSV_FILE = "./src/test/resources/StateCode.csv";
+    String PATH_OF_STATE_CODE_CSV_FILE_FOR_FILE_NOT_FOUND = "./src/test/resources/Sta.csv";
+    String PATH_OF_STATE_CODE_CSV_FILE_FOR_INCORRECT_TYPE = "/home/bridgelabz/Desktop/IndiaCensusAnalyser/src/test/resources/StateCode.docx";
+    String PATH_OF_STATE_CODE_CSV_FILE_INCORRECT_DELIMITER = "./src/test/resources/StateCodeCopy.csv";
+    String PATH_OF_STATE_CODE_CSV_FILE_INCORRECT_HEADER = "./src/test/resources/StateCodeCopy2.csv";
     @Test
-    public void givenTheStateCensusCSVFile_WhenProper_CheckIfNoOfRecordsMatches() throws IOException, CsvException, IOException, CensusAnalyserException
+    public void givenTheStateCensusCSVFile_WhenProper_CheckIfNoOfRecordsMatches() throws IOException, CensusAnalyserException
     {
-        int noOfRecords = StateCensusAnalyser.loadCSVFileData(PATH_OF_CSV_FILE);
+        int noOfRecords = CensusAnalyser.loadStateCensusCSVFileData(PATH_OF_CSV_FILE);
         Assert.assertEquals(28,noOfRecords);
     }
     @Test
@@ -32,7 +32,7 @@ public class StateCensusAnalyserTest
     {
         try
         {
-            int noOfRecords = StateCensusAnalyser.loadCSVFileData(PATH_OF_CSV_FILE_FOR_FILE_NOT_FOUND_EXCEPTION);
+            int noOfRecords = CensusAnalyser.loadStateCensusCSVFileData(PATH_OF_CSV_FILE_FOR_FILE_NOT_FOUND_EXCEPTION);
         }
         catch (CensusAnalyserException e)
         {
@@ -44,7 +44,7 @@ public class StateCensusAnalyserTest
     {
         try
         {
-            StateCensusAnalyser.getFileExtension(new File(PATH_OF_CSV_FILE_FOR_INCORRECT_TYPE_EXCEPTION));
+            CensusAnalyser.getFileExtension(new File(PATH_OF_CSV_FILE_FOR_INCORRECT_TYPE_EXCEPTION));
         }
         catch (CensusAnalyserException e)
         {
@@ -56,7 +56,7 @@ public class StateCensusAnalyserTest
     {
         try
         {
-            int noOfRecords = StateCensusAnalyser.loadCSVFileData(PATH_OF_CSV_FILE_FOR_INCORRECT_DELIMITER);
+            int noOfRecords = CensusAnalyser.loadStateCensusCSVFileData(PATH_OF_CSV_FILE_FOR_INCORRECT_DELIMITER);
             Assert.assertEquals(28,noOfRecords);
         }
         catch (CensusAnalyserException e)
@@ -69,7 +69,7 @@ public class StateCensusAnalyserTest
     {
         try
         {
-            int noOfRecords = StateCensusAnalyser.loadCSVFileData(PATH_OF_CSV_FILE_FOR_INCORRECT_HEADER);
+            int noOfRecords = CensusAnalyser.loadStateCensusCSVFileData(PATH_OF_CSV_FILE_FOR_INCORRECT_HEADER);
             Assert.assertEquals(28,noOfRecords);
         }
         catch (CensusAnalyserException e)
@@ -80,7 +80,7 @@ public class StateCensusAnalyserTest
     @Test
     public void givenTheStateCodeCSVFile_WhenProper_CheckIfNoOfRecordsMatches() throws IOException, CensusAnalyserException
     {
-        int noOfRecords = StateCodeAnalyser.loadCSVFileData(PATH_OF_STATE_CODE_CSV_FILE);
+        int noOfRecords = CensusAnalyser.loadStateCodeCSVFileData(PATH_OF_STATE_CODE_CSV_FILE);
         Assert.assertEquals(37,noOfRecords);
     }
     @Test
@@ -88,7 +88,7 @@ public class StateCensusAnalyserTest
     {
         try
         {
-            int noOfRecords = StateCodeAnalyser.loadCSVFileData(PATH_OF_STATE_CODE_CSV_FILE_FOR_FILE_NOT_FOUND);
+            int noOfRecords = CensusAnalyser.loadStateCodeCSVFileData(PATH_OF_STATE_CODE_CSV_FILE_FOR_FILE_NOT_FOUND);
         }
         catch (CensusAnalyserException e)
         {
@@ -100,7 +100,7 @@ public class StateCensusAnalyserTest
     {
         try
         {
-            StateCodeAnalyser.getFileExtension(new File(PATH_OF_STATE_CODE_CSV_FILE_FOR_INCORRECT_TYPE));
+            CensusAnalyser.getFileExtension(new File(PATH_OF_STATE_CODE_CSV_FILE_FOR_INCORRECT_TYPE));
         }
         catch (CensusAnalyserException e)
         {
@@ -112,7 +112,7 @@ public class StateCensusAnalyserTest
     {
         try
         {
-            int noOfRecords = StateCodeAnalyser.loadCSVFileData(PATH_OF_STATE_CODE_CSV_FILE_INCORRECT_DELIMITER);
+            int noOfRecords = CensusAnalyser.loadStateCodeCSVFileData(PATH_OF_STATE_CODE_CSV_FILE_INCORRECT_DELIMITER);
             Assert.assertEquals(37,noOfRecords);
         }
         catch (CensusAnalyserException e)
@@ -125,7 +125,7 @@ public class StateCensusAnalyserTest
     {
         try
         {
-            int noOfRecords = StateCodeAnalyser.loadCSVFileData(PATH_OF_STATE_CODE_CSV_FILE_INCORRECT_HEADER);
+            int noOfRecords = CensusAnalyser.loadStateCodeCSVFileData(PATH_OF_STATE_CODE_CSV_FILE_INCORRECT_HEADER);
             Assert.assertEquals(37,noOfRecords);
         }
         catch (CensusAnalyserException e)
