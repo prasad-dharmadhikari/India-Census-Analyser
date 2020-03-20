@@ -4,7 +4,6 @@ import com.bridgelabz.censusanalyser.model.CSVStateCensus;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,7 +13,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Iterator;
 
-public class StateCensusAnalyser
+public class CensusAnalyser
 {
     public static int loadCSVFileData(String filePath) throws CensusAnalyserException, IOException
     {
