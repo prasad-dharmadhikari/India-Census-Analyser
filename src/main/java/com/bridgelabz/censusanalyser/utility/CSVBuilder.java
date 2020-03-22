@@ -1,17 +1,16 @@
 package com.bridgelabz.censusanalyser.utility;
 
-import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
+import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import java.io.Reader;
 import java.util.Iterator;
-import com.bridgelabz.censusanalyser.utility.ICSVBuilder;
 
 public class CSVBuilder implements ICSVBuilder
 {
     @Override
-    public <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CensusAnalyserException
+    public <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CSVBuilderException
     {
         try
         {
@@ -21,7 +20,7 @@ public class CSVBuilder implements ICSVBuilder
         }
         catch (IllegalStateException e)
         {
-            throw new CensusAnalyserException(CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE, e.getMessage());
+            throw new CSVBuilderException(CSVBuilderException.ExceptionType.UNABLE_TO_PARSE, e.getMessage());
         }
     }
     @Override
