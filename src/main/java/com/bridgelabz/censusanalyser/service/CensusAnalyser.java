@@ -2,11 +2,8 @@ package com.bridgelabz.censusanalyser.service;
 import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
 import com.bridgelabz.censusanalyser.model.CSVStateCensus;
 import com.bridgelabz.censusanalyser.model.StateCode;
-import com.opencsv.CSVReader;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
+import com.bridgelabz.censusanalyser.utility.OpenCSV;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -18,16 +15,10 @@ public class CensusAnalyser
 {
     public static int loadStateCensusCSVFileData(String filePath) throws CensusAnalyserException, IOException
     {
-        int noOfRecords = 0;
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath)))
         {
-            Iterator<CSVStateCensus> csvRecords = getCSVFileIterator(reader , CSVStateCensus.class);
-            while (csvRecords.hasNext())
-            {
-                noOfRecords++;
-                csvRecords.next();
-            }
-            return noOfRecords;
+            Iterator<CSVStateCensus> csvRecords = OpenCSV.getCSVFileIterator(reader , CSVStateCensus.class);
+            return OpenCSV.getCount(csvRecords);
         }
         catch (NoSuchFileException e)
         {
@@ -43,16 +34,10 @@ public class CensusAnalyser
 
     public static int loadStateCodeCSVFileData(String filePath) throws IOException, CensusAnalyserException
     {
-        int noOfRecords = 0;
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath)))
         {
-            Iterator<StateCode> csvRecords = getCSVFileIterator(reader, StateCode.class);
-            while (csvRecords.hasNext())
-            {
-                noOfRecords++;
-                csvRecords.next();
-            }
-            return noOfRecords;
+            Iterator<StateCode> csvRecords = OpenCSV.getCSVFileIterator(reader, StateCode.class);
+            return OpenCSV.getCount(csvRecords);
         }
         catch (NoSuchFileException e)
         {
@@ -78,20 +63,6 @@ public class CensusAnalyser
         {
             throw new CensusAnalyserException(CensusAnalyserException.ExceptionType.ENTERED_WRONG_FILE_TYPE,
                                              "FILE TYPE IS INCORRECT");
-        }
-    }
-
-    private static <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CensusAnalyserException
-    {
-        try
-        {
-            CSVReader csvReader = new CSVReader(reader);
-            CsvToBean<E> csvToBean = new CsvToBeanBuilder<E>(csvReader).withType(csvClass).build();
-            return csvToBean.iterator();
-        }
-        catch (IllegalStateException e)
-        {
-            throw new CensusAnalyserException(CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE, e.getMessage());
         }
     }
 }
