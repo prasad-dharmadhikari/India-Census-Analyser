@@ -6,10 +6,12 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import java.io.Reader;
 import java.util.Iterator;
+import com.bridgelabz.censusanalyser.utility.ICSVBuilder;
 
-public class OpenCSV
+public class CSVBuilder implements ICSVBuilder
 {
-    public static <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CensusAnalyserException
+    @Override
+    public <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CensusAnalyserException
     {
         try
         {
@@ -22,7 +24,8 @@ public class OpenCSV
             throw new CensusAnalyserException(CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE, e.getMessage());
         }
     }
-    public static <E> int getCount(Iterator<E> csvRecords)
+    @Override
+    public <E> int getCount(Iterator<E> csvRecords)
     {
         int noOfRecords = 0;
         while (csvRecords.hasNext())
