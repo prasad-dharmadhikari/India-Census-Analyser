@@ -2,7 +2,8 @@ package com.bridgelabz.censusanalyser.service;
 import com.bridgelabz.censusanalyser.exception.CensusAnalyserException;
 import com.bridgelabz.censusanalyser.model.CSVStateCensus;
 import com.bridgelabz.censusanalyser.model.StateCode;
-import com.bridgelabz.censusanalyser.utility.OpenCSV;
+import com.bridgelabz.censusanalyser.utility.CSVBuilderFactory;
+import com.bridgelabz.censusanalyser.utility.ICSVBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -13,12 +14,13 @@ import java.util.Iterator;
 
 public class CensusAnalyser
 {
-    public static int loadStateCensusCSVFileData(String filePath) throws CensusAnalyserException, IOException
+    ICSVBuilder csvBuilder = new CSVBuilderFactory().createCSVBuilder();
+    public int loadStateCensusCSVFileData(String filePath) throws CensusAnalyserException, IOException
     {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath)))
         {
-            Iterator<CSVStateCensus> csvRecords = OpenCSV.getCSVFileIterator(reader , CSVStateCensus.class);
-            return OpenCSV.getCount(csvRecords);
+            Iterator<CSVStateCensus> csvRecords = csvBuilder.getCSVFileIterator(reader , CSVStateCensus.class);
+            return csvBuilder.getCount(csvRecords);
         }
         catch (NoSuchFileException e)
         {
@@ -31,13 +33,12 @@ public class CensusAnalyser
                                               "FILE DELIMITER OR HEADER IS INCORRECT");
         }
     }
-
-    public static int loadStateCodeCSVFileData(String filePath) throws IOException, CensusAnalyserException
+    public int loadStateCodeCSVFileData(String filePath) throws IOException, CensusAnalyserException
     {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath)))
         {
-            Iterator<StateCode> csvRecords = OpenCSV.getCSVFileIterator(reader, StateCode.class);
-            return OpenCSV.getCount(csvRecords);
+            Iterator<StateCode> csvRecords = csvBuilder.getCSVFileIterator(reader, StateCode.class);
+            return csvBuilder.getCount(csvRecords);
         }
         catch (NoSuchFileException e)
         {
