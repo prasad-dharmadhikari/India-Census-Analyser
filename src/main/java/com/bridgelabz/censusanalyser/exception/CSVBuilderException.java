@@ -1,6 +1,6 @@
 package com.bridgelabz.censusanalyser.exception;
 
-public class CensusAnalyserException extends Exception
+public class CSVBuilderException extends Exception
 {
     public enum ExceptionType
     {
@@ -9,7 +9,7 @@ public class CensusAnalyserException extends Exception
     }
     public ExceptionType type;
     // Constructor
-    public CensusAnalyserException(ExceptionType type, String message)
+    public CSVBuilderException(ExceptionType type, String message)
     {
         super(message);
         this.type = type;
