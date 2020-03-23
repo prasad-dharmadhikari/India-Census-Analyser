@@ -10,17 +10,21 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
+import com.google.gson.Gson;
 
 public class CensusAnalyser
 {
     ICSVBuilder csvBuilder = new CSVBuilderFactory().createCSVBuilder();
+    List<CSVStateCensus> stateCensusRecords = null;
+    List<StateCode> stateCodeRecords = null;
     public int loadStateCensusCSVFileData(String filePath) throws CSVBuilderException, IOException
     {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath)))
         {
-            List<CSVStateCensus> csvRecords = csvBuilder.getCSVFileList(reader , CSVStateCensus.class);
-            return csvRecords.size();
+            stateCensusRecords = csvBuilder.getCSVFileList(reader , CSVStateCensus.class);
+            return stateCensusRecords.size();
         }
         catch (NoSuchFileException e)
         {
@@ -37,8 +41,8 @@ public class CensusAnalyser
     {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath)))
         {
-            List<CSVStateCensus> csvRecords = csvBuilder.getCSVFileList(reader, StateCode.class);
-            return csvRecords.size();
+            stateCodeRecords = csvBuilder.getCSVFileList(reader, StateCode.class);
+            return stateCodeRecords.size();
         }
         catch (NoSuchFileException e)
         {
@@ -63,6 +67,36 @@ public class CensusAnalyser
         {
             throw new CSVBuilderException(CSVBuilderException.ExceptionType.ENTERED_WRONG_FILE_TYPE,
                                              "FILE TYPE IS INCORRECT");
+        }
+    }
+
+    public String getStateWiseSortedData() throws CSVBuilderException
+    {
+        if (stateCensusRecords == null || stateCensusRecords.size() == 0)
+        {
+            throw new CSVBuilderException(CSVBuilderException.ExceptionType.NO_CENSUS_DATA,"Data empty");
+        }
+        Comparator<CSVStateCensus> censusCSVComparator = Comparator.comparing(csvStateCensus ->
+                                                                              csvStateCensus.getState());
+        this.sort(censusCSVComparator);
+        String sortedStateCensusJson = new Gson().toJson(stateCensusRecords);
+        return sortedStateCensusJson;
+    }
+
+    public void sort(Comparator<CSVStateCensus> censusCSVComparator)
+    {
+        for (int iterate = 0; iterate < stateCensusRecords.size() - 1; iterate++)
+        {
+            for (int Inneriterate = 0; Inneriterate < stateCensusRecords.size() - iterate - 1; Inneriterate++)
+            {
+                CSVStateCensus census1 = stateCensusRecords.get(Inneriterate);
+                CSVStateCensus census2 = stateCensusRecords.get(Inneriterate + 1);
+                if (censusCSVComparator.compare(census1, census2) > 0)
+                {
+                    stateCensusRecords.set(Inneriterate, census2);
+                    stateCensusRecords.set(Inneriterate + 1, census1);
+                }
+            }
         }
     }
 }
