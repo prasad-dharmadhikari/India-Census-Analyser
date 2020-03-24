@@ -22,4 +22,14 @@ public class StateCode {
         this.tin = tin;
         this.stateCode = stateCode;
     }
+
+    @Override
+    public String toString() {
+        return "StateCode{" +
+                "srNo=" + srNo +
+                ", stateName='" + stateName + '\'' +
+                ", tin=" + tin +
+                ", stateCode='" + stateCode + '\'' +
+                '}';
+    }
 }
