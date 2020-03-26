@@ -1,5 +1,8 @@
 package com.bridgelabz.censusanalyser.service;
 
+
+import com.bridgelabz.censusanalyser.dao.CSVStateCensusDAO;
+import com.bridgelabz.censusanalyser.dao.StateCodeDAO;
 import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
 import com.bridgelabz.censusanalyser.model.CSVStateCensus;
 import com.bridgelabz.censusanalyser.model.StateCode;
@@ -49,7 +52,7 @@ public class CensusAnalyser {
     public String getStateWiseSortedData() throws CSVBuilderException {
         if (censusHashMap == null || censusHashMap.size() == 0)
             throw new CSVBuilderException(CSVBuilderException.ExceptionType.NO_CENSUS_DATA, "Data empty");
-        Comparator<CSVStateCensus> censusCSVComparator = Comparator.comparing(csvStateCensus -> csvStateCensus.State);
+        Comparator<CSVStateCensus> censusCSVComparator = Comparator.comparing(csvStateCensusDAO -> csvStateCensusDAO.State);
         this.sort(censusCSVComparator , censusHashMap);
         censusRecords = censusHashMap.values();
         String sortedStateCensusJson = new Gson().toJson(censusRecords);
@@ -59,7 +62,7 @@ public class CensusAnalyser {
     public String getStateCodeWiseSortedData() throws CSVBuilderException {
         if (censusHashMap == null || censusHashMap.size() == 0)
             throw new CSVBuilderException(CSVBuilderException.ExceptionType.NO_CENSUS_DATA, "Data empty");
-        Comparator<StateCode> stateCodeCSVComparator = Comparator.comparing(stateCode -> stateCode.stateCode);
+        Comparator<StateCodeDAO> stateCodeCSVComparator = Comparator.comparing(stateCodeDAO -> stateCodeDAO.stateCode);
         this.sort(stateCodeCSVComparator , censusHashMap);
         censusRecords = censusHashMap.values();
         String sortedStateCodeJson = new Gson().toJson(censusRecords);
