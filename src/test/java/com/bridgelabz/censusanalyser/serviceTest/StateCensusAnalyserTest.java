@@ -141,6 +141,18 @@ public class StateCensusAnalyserTest {
         } catch (CSVBuilderException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void givenTheStateCensusCSVFile_WhenSortedOnPopulationDensity_ShouldReturnSortedList() throws IOException {
+        try {
+            censusAnalyser.loadStateCensusData(PATH_OF_CSV_FILE);
+            String sortedStatePopulationData = censusAnalyser.getStatePopulationDensityWiseSortedData();
+            IndiaCensusDAO[] censusCSV = new Gson().fromJson(sortedStatePopulationData, IndiaCensusDAO[].class);
+            Assert.assertEquals("Bihar", censusCSV[0].state);
+            Assert.assertEquals("Mizoram", censusCSV[27].state);
+        } catch (CSVBuilderException e) {
+            e.printStackTrace();
+        }
     }
 }
