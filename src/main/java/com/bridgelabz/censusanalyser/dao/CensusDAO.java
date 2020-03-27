@@ -5,6 +5,7 @@ import com.bridgelabz.censusanalyser.model.StateCode;
 import com.bridgelabz.censusanalyser.model.USCensus;
 
 public class CensusDAO {
+
     public String state;
     public long population;
     public long AreaInSqKm;
@@ -21,12 +22,14 @@ public class CensusDAO {
         this.tin = stateCode.tin;
         this.stateCode = stateCode.stateCode;
     }
+
     public CensusDAO(CSVStateCensus csvStateCensus) {
         this.state = csvStateCensus.State;
         this.population = csvStateCensus.Population;
         this.AreaInSqKm = csvStateCensus.AreaInSqKm;
         this.DensityPerSqkm = csvStateCensus.DensityPerSqkm;
     }
+
     public CensusDAO(USCensus usCensus) {
         this.state = usCensus.state;
         this.population = usCensus.population;
@@ -34,4 +37,5 @@ public class CensusDAO {
         density = usCensus.populationDensity;
         this.stateCode = usCensus.stateID;
     }
+
 }
