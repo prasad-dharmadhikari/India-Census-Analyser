@@ -1,8 +1,7 @@
 package com.bridgelabz.censusanalyser.service;
 
 
-import com.bridgelabz.censusanalyser.dao.CSVStateCensusDAO;
-import com.bridgelabz.censusanalyser.dao.StateCodeDAO;
+import com.bridgelabz.censusanalyser.dao.IndiaCensusDAO;
 import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
 import com.bridgelabz.censusanalyser.model.CSVStateCensus;
 import com.bridgelabz.censusanalyser.model.StateCode;
@@ -21,13 +20,19 @@ import com.google.gson.Gson;
 
 public class CensusAnalyser {
     ICSVBuilder csvBuilder = new CSVBuilderFactory().createCSVBuilder();
-    Collection<Object> censusRecords = null;
-    HashMap<Object, Object> censusHashMap = null;
+    Collection<IndiaCensusDAO> censusRecords = null;
+    HashMap<Integer, IndiaCensusDAO> censusHashMap = new HashMap<>();
 
-    public int loadCensusData(String filePath , Class csvClass) throws IOException, CSVBuilderException {
+    public int loadStateCensusData(String filePath) throws IOException, CSVBuilderException {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
-            censusHashMap = csvBuilder.getCSVFileMap(reader, csvClass);
-            return censusHashMap.size();
+            Iterator<CSVStateCensus> csvFileIterator = csvBuilder.getCSVFileIterator(reader, CSVStateCensus.class);
+            Integer count = 0;
+            while (csvFileIterator.hasNext()) {
+                IndiaCensusDAO indiaCensusDAO = new IndiaCensusDAO(csvFileIterator.next());
+                this.censusHashMap.put(count,indiaCensusDAO);
+                count++;
+            }
+            return this.censusHashMap.size();
         } catch (NoSuchFileException e) {
             throw new CSVBuilderException(CSVBuilderException.ExceptionType.ENTERED_WRONG_FILE_NAME,
                     "FILE NAME IS INCORRECT");
@@ -36,6 +41,26 @@ public class CensusAnalyser {
                     "FILE DELIMITER OR HEADER IS INCORRECT");
         }
     }
+
+    public int loadStateCodeData(String filePath) throws IOException, CSVBuilderException {
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
+            Iterator<StateCode> csvFileIterator = csvBuilder.getCSVFileIterator(reader, StateCode.class);
+            Integer count = 0;
+            while (csvFileIterator.hasNext()) {
+                IndiaCensusDAO indiaCensusDAO = new IndiaCensusDAO(csvFileIterator.next());
+                this.censusHashMap.put(count,indiaCensusDAO);
+                count++;
+            }
+            return this.censusHashMap.size();
+        } catch (NoSuchFileException e) {
+            throw new CSVBuilderException(CSVBuilderException.ExceptionType.ENTERED_WRONG_FILE_NAME,
+                    "FILE NAME IS INCORRECT");
+        } catch (RuntimeException e) {
+            throw new CSVBuilderException(CSVBuilderException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER,
+                    "FILE DELIMITER OR HEADER IS INCORRECT");
+        }
+    }
+
 
     public static void getFileExtension(File filePath) throws CSVBuilderException {
         String fileName = filePath.getName();
@@ -52,9 +77,9 @@ public class CensusAnalyser {
     public String getStateWiseSortedData() throws CSVBuilderException {
         if (censusHashMap == null || censusHashMap.size() == 0)
             throw new CSVBuilderException(CSVBuilderException.ExceptionType.NO_CENSUS_DATA, "Data empty");
-        Comparator<CSVStateCensus> censusCSVComparator = Comparator.comparing(csvStateCensusDAO -> csvStateCensusDAO.State);
-        this.sort(censusCSVComparator , censusHashMap);
-        censusRecords = censusHashMap.values();
+        Comparator<Map.Entry<Integer, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().state);
+        LinkedHashMap<Integer, IndiaCensusDAO> sortedByValue = this.sort(censusComparator);
+        censusRecords = sortedByValue.values();
         String sortedStateCensusJson = new Gson().toJson(censusRecords);
         return sortedStateCensusJson;
     }
@@ -62,23 +87,22 @@ public class CensusAnalyser {
     public String getStateCodeWiseSortedData() throws CSVBuilderException {
         if (censusHashMap == null || censusHashMap.size() == 0)
             throw new CSVBuilderException(CSVBuilderException.ExceptionType.NO_CENSUS_DATA, "Data empty");
-        Comparator<StateCodeDAO> stateCodeCSVComparator = Comparator.comparing(stateCodeDAO -> stateCodeDAO.stateCode);
-        this.sort(stateCodeCSVComparator , censusHashMap);
-        censusRecords = censusHashMap.values();
+        Comparator<Map.Entry<Integer, IndiaCensusDAO>> censusComparator = Comparator.comparing(census -> census.getValue().stateCode);
+        LinkedHashMap<Integer, IndiaCensusDAO> sortedByValue = this.sort(censusComparator);
+        censusRecords = sortedByValue.values();
         String sortedStateCodeJson = new Gson().toJson(censusRecords);
         return sortedStateCodeJson;
     }
 
-    public <E> void sort(Comparator<E> censusCSVComparator , HashMap<Object, Object> censusRecords) {
-        for (int iterate = 0; iterate < censusRecords.size() - 1; iterate++) {
-            for (int Inneriterate = 0; Inneriterate < censusRecords.size() - iterate - 1; Inneriterate++) {
-                E census1 = (E) censusRecords.get(Inneriterate);
-                E census2 = (E) censusRecords.get(Inneriterate + 1);
-                if (censusCSVComparator.compare(census1, census2) > 0) {
-                    censusRecords.put(Inneriterate, census2);
-                    censusRecords.put(Inneriterate + 1, census1);
-                }
-            }
+    public LinkedHashMap<Integer, IndiaCensusDAO> sort(Comparator censusCSVComparator) {
+        Set<Map.Entry<Integer, IndiaCensusDAO>> entries = censusHashMap.entrySet();
+        List<Map.Entry<Integer, IndiaCensusDAO>> listOfEntries = new ArrayList<Map.Entry<Integer, IndiaCensusDAO>>(entries);
+        Collections.sort(listOfEntries, censusCSVComparator);
+        LinkedHashMap<Integer, IndiaCensusDAO> sortedByValue = new LinkedHashMap<Integer, IndiaCensusDAO>(listOfEntries.size());
+        // copying entries from List to Map
+        for (Map.Entry<Integer, IndiaCensusDAO> entry : listOfEntries) {
+            sortedByValue.put(entry.getKey(), entry.getValue());
         }
+        return sortedByValue;
     }
 }
