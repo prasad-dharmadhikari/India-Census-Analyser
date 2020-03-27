@@ -1,67 +1,26 @@
 package com.bridgelabz.censusanalyser.service;
 
-
 import com.bridgelabz.censusanalyser.dao.CensusDAO;
 import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
-import com.bridgelabz.censusanalyser.model.CSVStateCensus;
-import com.bridgelabz.censusanalyser.model.StateCode;
-import com.bridgelabz.censusanalyser.model.USCensus;
-import com.bridgelabz.censusanalyser.utility.CSVBuilderFactory;
-import com.bridgelabz.censusanalyser.utility.ICSVBuilder;
-
+import com.bridgelabz.censusanalyser.utility.CensusLoader;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.StreamSupport;
-
 import com.google.gson.Gson;
 
 public class CensusAnalyser {
-    ICSVBuilder csvBuilder = new CSVBuilderFactory().createCSVBuilder();
+    CensusLoader censusLoader = new CensusLoader();
     Collection<CensusDAO> censusRecords = null;
-    HashMap<Integer, CensusDAO> censusHashMap = new HashMap<>();
+    HashMap<Integer, CensusDAO> censusHashMap = new HashMap<Integer, CensusDAO>();
 
-    public int loadStateCensusData(String filePath) throws IOException, CSVBuilderException {
-        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
-            Iterator<CSVStateCensus> csvFileIterator = csvBuilder.getCSVFileIterator(reader, CSVStateCensus.class);
-            Integer count = 0;
-            while (csvFileIterator.hasNext()) {
-                CensusDAO censusDAO = new CensusDAO(csvFileIterator.next());
-                this.censusHashMap.put(count, censusDAO);
-                count++;
-            }
-            return this.censusHashMap.size();
-        } catch (NoSuchFileException e) {
-            throw new CSVBuilderException(CSVBuilderException.ExceptionType.ENTERED_WRONG_FILE_NAME,
-                    "FILE NAME IS INCORRECT");
-        } catch (RuntimeException e) {
-            throw new CSVBuilderException(CSVBuilderException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER,
-                    "FILE DELIMITER OR HEADER IS INCORRECT");
-        }
+    public int loadCensusData(String... filePath) throws IOException, CSVBuilderException {
+        censusHashMap = censusLoader.loadStateCensusData(censusHashMap, filePath);
+        return censusHashMap.size();
     }
 
-    public int loadStateCodeData(String filePath) throws IOException, CSVBuilderException {
-        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
-            Iterator<StateCode> csvFileIterator = csvBuilder.getCSVFileIterator(reader, StateCode.class);
-            Iterable<StateCode> csvIterable = () -> csvFileIterator;
-            final Integer[] count = {0};
-            StreamSupport.stream(csvIterable.spliterator(), false)
-                    .forEach(censusCSV -> {
-                        censusHashMap.put(count[0], new CensusDAO(censusCSV));
-                        count[0]++;
-                    });
-            return this.censusHashMap.size();
-        } catch (NoSuchFileException e) {
-            throw new CSVBuilderException(CSVBuilderException.ExceptionType.ENTERED_WRONG_FILE_NAME,
-                    "FILE NAME IS INCORRECT");
-        } catch (RuntimeException e) {
-            throw new CSVBuilderException(CSVBuilderException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER,
-                    "FILE DELIMITER OR HEADER IS INCORRECT");
-        }
+    public int loadUSCensusData(String filePath) throws IOException, CSVBuilderException {
+        censusHashMap = censusLoader.loadUSCensusData(censusHashMap, filePath);
+        return censusHashMap.size();
     }
 
     public static void getFileExtension(File filePath) throws CSVBuilderException {
@@ -116,7 +75,6 @@ public class CensusAnalyser {
         Collections.reverse(sortedList);
         String sortedStatePopulationDesityJson = new Gson().toJson(sortedList);
         return sortedStatePopulationDesityJson;
-
     }
 
     public String getStateAreaWiseSortedData() throws CSVBuilderException {
@@ -139,24 +97,5 @@ public class CensusAnalyser {
             sortedByValue.put(entry.getKey(), entry.getValue());
         }
         return sortedByValue;
-    }
-
-    public int loadUSCensusData(String filePath) throws IOException, CSVBuilderException {
-        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
-            Iterator<USCensus> csvFileIterator = csvBuilder.getCSVFileIterator(reader, USCensus.class);
-            Integer count = 0;
-            while (csvFileIterator.hasNext()) {
-                CensusDAO censusDAO = new CensusDAO(csvFileIterator.next());
-                this.censusHashMap.put(count, censusDAO);
-                count++;
-            }
-            return this.censusHashMap.size();
-        } catch (NoSuchFileException e) {
-            throw new CSVBuilderException(CSVBuilderException.ExceptionType.ENTERED_WRONG_FILE_NAME,
-                    "FILE NAME IS INCORRECT");
-        } catch (RuntimeException e) {
-            throw new CSVBuilderException(CSVBuilderException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER,
-                    "FILE DELIMITER OR HEADER IS INCORRECT");
-        }
     }
 }
