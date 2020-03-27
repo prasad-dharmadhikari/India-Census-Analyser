@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2020-03-23T11:11:03" hostname="Prasad" time="0.784">
+<testsuite name="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-03-27T10:56:16" hostname="Prasad" time="0.248">
   <properties/>
-  <testcase name="givenTheStateCensusCSVFile_WhenProper_CheckIfNoOfRecordsMatches" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.409"/>
-  <testcase name="givenTheStateCodeCSVFile_WhenProper_CheckIfNoOfRecordsMatches" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.1"/>
-  <testcase name="givenTheStateCodeCSVFile_IfTypeIsIncorrect_ShouldThrowCustomException" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.003"/>
-  <testcase name="givenTheStateCensusCSVFile_IfHeaderIsIncorrect_ShouldThrowCustomException" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.063"/>
-  <testcase name="givenTheStateCodeCSVFile_IfDelimiterIsIncorrect_ShouldThrowCustomException" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.039"/>
-  <testcase name="givenTheStateCensusCSVFile_IfDelimiterIsIncorrect_ShouldThrowCustomException" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.039"/>
-  <testcase name="givenTheStateCodeCSVFile_IfIncorrect_ShouldThrowCustomException" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.001"/>
-  <testcase name="givenTheStateCodeCSVFile_IfHeaderIsIncorrect_ShouldThrowCustomException" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.12"/>
-  <testcase name="givenTheStateCensusCSVFile_IfTypeIsIncorrect_ShouldThrowCustomException" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.0"/>
-  <testcase name="givenTheStateCensusCSVFile_IfIncorrect_ShouldThrowCustomException" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.001"/>
+  <testcase name="givenUSCensusCSVFile_WhenProper_CheckIfNoOfRecordsMatches" classname="com.bridgelabz.censusanalyser.serviceTest.StateCensusAnalyserTest" time="0.248"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
