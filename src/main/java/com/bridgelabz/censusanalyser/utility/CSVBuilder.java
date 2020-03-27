@@ -1,30 +1,30 @@
 package com.bridgelabz.censusanalyser.utility;
 
+import com.bridgelabz.censusanalyser.dao.IndiaCensusDAO;
 import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
+import com.bridgelabz.censusanalyser.model.CSVStateCensus;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.Reader;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class CSVBuilder implements ICSVBuilder {
     @Override
-    public <E> HashMap<E, E> getCSVFileMap(Reader reader, Class csvClass) throws CSVBuilderException {
+    public <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CSVBuilderException {
         try {
-            CSVReader csvReader = new CSVReader(reader);
-            CsvToBean<E> csvToBean = new CsvToBeanBuilder<E>(csvReader).withType(csvClass).build();
-            List list = csvToBean.parse();
-            HashMap<Integer , Object> map = new HashMap<>();
-            Integer count = 0;
-            for (Object record:list) {
-                map.put(count,record);
-                count++;
-            }
-            return (HashMap<E, E>) map;
+            CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+            csvToBeanBuilder.withType(csvClass);
+            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
+            CsvToBean<E> csvToBean = csvToBeanBuilder.build();
+            Iterator<E> censusCSVIterator = csvToBean.iterator();
+            return censusCSVIterator;
         } catch (IllegalStateException e) {
-            throw new CSVBuilderException(CSVBuilderException.ExceptionType.UNABLE_TO_PARSE, e.getMessage());
+            throw new CSVBuilderException(CSVBuilderException.ExceptionType.UNABLE_TO_PARSE,
+                    e.getMessage());
         }
     }
 }
