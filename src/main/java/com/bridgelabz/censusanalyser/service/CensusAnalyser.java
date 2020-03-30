@@ -1,25 +1,24 @@
 package com.bridgelabz.censusanalyser.service;
 
+import com.bridgelabz.censusanalyser.adapter.CensusAdapter;
+import com.bridgelabz.censusanalyser.adapter.CensusAdapterFactory;
 import com.bridgelabz.censusanalyser.dao.CensusDAO;
 import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
-import com.bridgelabz.censusanalyser.utility.CensusLoader;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import com.google.gson.Gson;
 
 public class CensusAnalyser {
-    CensusLoader censusLoader = new CensusLoader();
+
     Collection<CensusDAO> censusRecords = null;
     HashMap<Integer, CensusDAO> censusHashMap = new HashMap<Integer, CensusDAO>();
+    public enum COUNTRY {INDIA, US};
 
-    public int loadCensusData(String... filePath) throws IOException, CSVBuilderException {
-        censusHashMap = censusLoader.loadStateCensusData(censusHashMap, filePath);
-        return censusHashMap.size();
-    }
-
-    public int loadUSCensusData(String filePath) throws IOException, CSVBuilderException {
-        censusHashMap = censusLoader.loadUSCensusData(censusHashMap, filePath);
+    public int loadCensusData(COUNTRY country, String... filePath) throws IOException, CSVBuilderException {
+        CensusAdapter censusDataLoader = CensusAdapterFactory.getCensusData(country);
+        censusHashMap = censusDataLoader.loadCensusData(filePath);
         return censusHashMap.size();
     }
 
