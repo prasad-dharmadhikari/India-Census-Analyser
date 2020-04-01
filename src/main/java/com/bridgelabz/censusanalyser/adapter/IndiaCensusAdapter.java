@@ -2,8 +2,8 @@ package com.bridgelabz.censusanalyser.adapter;
 
 import com.bridgelabz.censusanalyser.dao.CensusDAO;
 import com.bridgelabz.censusanalyser.exception.CSVBuilderException;
-import com.bridgelabz.censusanalyser.model.CSVStateCensus;
-import com.bridgelabz.censusanalyser.model.StateCode;
+import com.bridgelabz.censusanalyser.model.IndiaStateCensusCSV;
+import com.bridgelabz.censusanalyser.model.IndiaStateCodeCSV;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
 public class IndiaCensusAdapter extends CensusAdapter {
     @Override
     public HashMap<Integer, CensusDAO> loadCensusData(String... filePath) throws CSVBuilderException, IOException {
-        HashMap<Integer, CensusDAO> censusHashMap = super.loadCensusData(CSVStateCensus.class, filePath[0]);
+        HashMap<Integer, CensusDAO> censusHashMap = super.loadCensusData(IndiaStateCensusCSV.class, filePath[0]);
         if (filePath.length == 1)
             return censusHashMap;
         return this.loadStateCodeData(censusHashMap, filePath[1]);
@@ -25,10 +25,10 @@ public class IndiaCensusAdapter extends CensusAdapter {
 
     private HashMap<Integer, CensusDAO> loadStateCodeData(HashMap<Integer, CensusDAO> censusHashMap, String filePath) throws CSVBuilderException, IOException {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
-            Iterator<StateCode> csvFileIterator = csvBuilder.getCSVFileIterator(reader, StateCode.class);
-            Iterable<StateCode> csvIterable = () -> csvFileIterator;
+            Iterator<IndiaStateCodeCSV> csvFileIterator = csvBuilder.getCSVFileIterator(reader, IndiaStateCodeCSV.class);
+            Iterable<IndiaStateCodeCSV> csvIterable = () -> csvFileIterator;
             final Integer[] count = {0};
-            StreamSupport.stream(csvIterable.spliterator(), false)
+            StreamSupport.stream(csvIterable.spliterator(), false).map(IndiaStateCodeCSV.class::cast)
                     .forEach(censusCSV -> {
                         censusHashMap.put(count[0], new CensusDAO(censusCSV));
                         count[0]++;

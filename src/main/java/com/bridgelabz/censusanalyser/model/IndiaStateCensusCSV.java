@@ -2,27 +2,30 @@ package com.bridgelabz.censusanalyser.model;
 
 import com.opencsv.bean.CsvBindByName;
 
-public class CSVStateCensus {
+public class CSVStateCensus extends StateCode {
     @CsvBindByName(column = "State")
     public String State;
 
     @CsvBindByName(column = "Population")
-    public long Population;
+    public Integer Population;
 
     @CsvBindByName(column = "AreaInSqKm")
-    public long AreaInSqKm;
+    public Double AreaInSqKm;
 
     @CsvBindByName(column = "DensityPerSqKm")
-    public int DensityPerSqkm;
+    public Double DensityPerSqkm;
+
+    public String stateCode = super.stateCode;
 
     public CSVStateCensus() {
     }
 
-    public CSVStateCensus(String state, long population, long areaInSqKm, int densityPerSqkm) {
-        State = state;
-        Population = population;
-        AreaInSqKm = areaInSqKm;
-        DensityPerSqkm = densityPerSqkm;
+    public CSVStateCensus(String state, String stateCode, Integer population, Double areaInSqKm, Double densityPerSqkm) {
+        this.State = state;
+        this.Population = population;
+        this.AreaInSqKm = areaInSqKm;
+        this.DensityPerSqkm = densityPerSqkm;
+        this.stateCode = stateCode;
     }
 
     @Override
@@ -34,5 +37,4 @@ public class CSVStateCensus {
                 ", DensityPerSqkm=" + DensityPerSqkm +
                 '}';
     }
-
 }
