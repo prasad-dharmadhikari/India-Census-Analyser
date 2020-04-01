@@ -2,7 +2,8 @@ package com.bridgelabz.censusanalyser.model;
 
 import com.opencsv.bean.CsvBindByName;
 
-public class CSVStateCensus extends StateCode {
+public class IndiaStateCensusCSV {
+
     @CsvBindByName(column = "State")
     public String State;
 
@@ -15,12 +16,12 @@ public class CSVStateCensus extends StateCode {
     @CsvBindByName(column = "DensityPerSqKm")
     public Double DensityPerSqkm;
 
-    public String stateCode = super.stateCode;
+    public String stateCode = new IndiaStateCodeCSV().getStateCode();
 
-    public CSVStateCensus() {
+    public IndiaStateCensusCSV() {
     }
 
-    public CSVStateCensus(String state, String stateCode, Integer population, Double areaInSqKm, Double densityPerSqkm) {
+    public IndiaStateCensusCSV(String state, String stateCode, Integer population, Double areaInSqKm, Double densityPerSqkm) {
         this.State = state;
         this.Population = population;
         this.AreaInSqKm = areaInSqKm;
@@ -30,7 +31,7 @@ public class CSVStateCensus extends StateCode {
 
     @Override
     public String toString() {
-        return "CSVStateCensus{" +
+        return "IndiaStateCensusCSV{" +
                 "State='" + State + '\'' +
                 ", Population=" + Population +
                 ", AreaInSqKm=" + AreaInSqKm +

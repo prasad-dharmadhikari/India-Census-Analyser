@@ -2,7 +2,7 @@ package com.bridgelabz.censusanalyser.model;
 
 import com.opencsv.bean.CsvBindByName;
 
-public class StateCode {
+public class IndiaStateCodeCSV {
     @CsvBindByName(column = "SrNo")
     public Integer srNo;
 
@@ -15,20 +15,24 @@ public class StateCode {
     @CsvBindByName(column = "StateCode")
     public String stateCode;
 
-    public StateCode() {
+    public IndiaStateCodeCSV() {
 
     }
 
-    public StateCode(Integer srNo, String stateName, Integer tin, String stateCode) {
+    public IndiaStateCodeCSV(Integer srNo, String stateName, Integer tin, String stateCode) {
         this.srNo = srNo;
         this.stateName = stateName;
         this.tin = tin;
         this.stateCode = stateCode;
     }
 
+    public String getStateCode() {
+        return stateCode;
+    }
+
     @Override
     public String toString() {
-        return "StateCode{" +
+        return "IndiaStateCodeCSV{" +
                 "srNo=" + srNo +
                 ", stateName='" + stateName + '\'' +
                 ", tin=" + tin +
