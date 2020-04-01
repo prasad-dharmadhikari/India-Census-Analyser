@@ -195,4 +195,44 @@ public class StateCensusAnalyserTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenTheUSCensusCSVFile_WhenSortedOnStateCode_ShouldReturnSortedList() throws IOException {
+        try {
+            USCensusAnalyser.loadCensusData(PATH_OF_US_CENSUS_CSV_FILE);
+            String sortedStatePopulationData = USCensusAnalyser.getSortedCensusData(CensusAnalyser.SortingMode.STATECODE);
+            USCensus[] censusCSV = new Gson().fromJson(sortedStatePopulationData, USCensus[].class);
+            Assert.assertEquals("AK", censusCSV[0].stateID);
+            Assert.assertEquals("WY", censusCSV[50].stateID);
+        } catch (CSVBuilderException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void givenTheUSCensusCSVFile_WhenSortedOnArea_ShouldReturnSortedList() throws IOException {
+        try {
+            USCensusAnalyser.loadCensusData(PATH_OF_US_CENSUS_CSV_FILE);
+            String sortedStatePopulationData = USCensusAnalyser.getSortedCensusData(CensusAnalyser.SortingMode.AREA);
+            USCensus[] censusCSV = new Gson().fromJson(sortedStatePopulationData, USCensus[].class);
+            Assert.assertEquals("Alaska", censusCSV[0].state);
+            Assert.assertEquals("District of Columbia", censusCSV[50].state);
+        } catch (CSVBuilderException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenTheUSCensusCSVFile_WhenSortedOnPopulationDensity_ShouldReturnSortedList() throws IOException {
+        try {
+            USCensusAnalyser.loadCensusData(PATH_OF_US_CENSUS_CSV_FILE);
+            String sortedStatePopulationData = USCensusAnalyser.getSortedCensusData(CensusAnalyser.SortingMode.DENSITY);
+            USCensus[] censusCSV = new Gson().fromJson(sortedStatePopulationData, USCensus[].class);
+            Assert.assertEquals("District of Columbia", censusCSV[0].state);
+            Assert.assertEquals("Alaska", censusCSV[50].state);
+        } catch (CSVBuilderException e) {
+            e.printStackTrace();
+        }
+    }
 }
