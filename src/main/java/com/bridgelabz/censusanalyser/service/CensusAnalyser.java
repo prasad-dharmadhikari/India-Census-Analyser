@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 
 public class CensusAnalyser {
     HashMap<Integer, CensusDAO> censusHashMap = new HashMap<Integer, CensusDAO>();
+
     public enum COUNTRY {INDIA, US}
 
     public enum SortingMode {AREA, STATE, STATECODE, DENSITY, POPULATION}
@@ -48,6 +49,16 @@ public class CensusAnalyser {
         ArrayList censusDTO = censusHashMap.values().stream()
                 .sorted(CensusDAO.getSortComparator(mode))
                 .map(censusDAO -> censusDAO.getCensusDTO(country))
+                .collect(Collectors.toCollection(ArrayList::new));
+        return new Gson().toJson(censusDTO);
+    }
+
+    public String getDualSortByPopulationAndDensity() throws CSVBuilderException {
+        if (censusHashMap == null || censusHashMap.size() == 0)
+            throw new CSVBuilderException(CSVBuilderException.ExceptionType.NO_CENSUS_DATA, "No Census Data");
+        ArrayList censusDTO = censusHashMap.values().stream()
+                .sorted(Comparator.comparingInt(CensusDAO::getPopulation).thenComparingDouble(CensusDAO::getDensityPerSqkm).reversed())
+                .map(c -> c.getCensusDTO(country))
                 .collect(Collectors.toCollection(ArrayList::new));
         return new Gson().toJson(censusDTO);
     }
